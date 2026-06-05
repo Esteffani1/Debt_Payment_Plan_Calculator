@@ -1,6 +1,7 @@
 import csv
 import os
 import sys
+from datetime import datetime
 import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
 
@@ -17,7 +18,7 @@ except ModuleNotFoundError:
     from Debt_Calculator import simulate_debt_payoff
 
 
-DEBT_LIST_PATH = os.path.join(os.path.dirname(__file__), "Debt_Payment_Calculator_Plan", "Debt_list.txt")
+DEBT_LIST_PATH = os.path.join(os.path.dirname(__file__), "Debt_list.txt")
 
 
 class DebtPlannerGUI:
@@ -257,11 +258,15 @@ class DebtPlannerGUI:
             messagebox.showwarning("No Results", "Calculate the payoff results before exporting.")
             return
 
+        method_name = self.simulation_results["method"].capitalize()
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        initial_filename = f"Debt_Payoff_Results_{method_name}_{timestamp}.csv"
+
         filepath = filedialog.asksaveasfilename(
             title="Save payoff results",
             defaultextension=".csv",
             filetypes=[("CSV files", "*.csv")],
-            initialfile="Debt_Payoff_Results.csv",
+            initialfile=initial_filename,
         )
         if not filepath:
             return
